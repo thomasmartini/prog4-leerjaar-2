@@ -1,6 +1,11 @@
 # PixiJS Startproject
 
-Dit is een startproject voor het werken met ***PixiJS en Typescript***. Om met dit project te werken moet je eerst [NodeJS installeren](https://nodejs.org/en/). Je kan dan deze repository downloaden en vervolgens installeren met:
+Dit is een startproject voor het werken met ***PixiJS en Typescript***. Installeer eerst
+
+- [NodeJS](https://nodejs.org/en/)
+- [Visual Studio Code](https://code.visualstudio.com)
+
+ Je kan daarna deze repository downloaden en vervolgens installeren met:
 
 ```bash
 npm install
@@ -17,6 +22,17 @@ Als je de game wil publiceren kan je een `build` uitvoeren:
 ```bash
 npm run build
 ```
+
+## Installatie voorbeeld
+
+Bekijk dit filmpje voor het snel opzetten van dit voorbeeldproject op je eigen computer.
+
+
+
+<br>
+<br>
+<br>
+
 ## Voorbeeldcode
 
 Toon het Pixi Canvas en een Sprite:
