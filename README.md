@@ -64,14 +64,6 @@ Maak een aquarium met vissen en bubbles zoals in deze afbeelding.
 <br>
 <br>
 
-# Publiceren op github pages
-
-Push de game naar je eigen github repository. Zet vervolgens de game live door op ***github pages***  te kiezen voor `publish main/docs`.
-
-<br>
-<br>
-<br>
-
 # Links
 
 - [📺 Installatie instructies Youtube](https://youtu.be/uuPprdiFKXI)
