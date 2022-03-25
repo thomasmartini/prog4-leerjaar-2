@@ -17,7 +17,7 @@ Daarna kan je aan de slag met ontwikkelen in development mode:
 npm run start
 ```
 
-Als je de game wil publiceren kan je een `build` uitvoeren:
+Als je de game wil publiceren kan je een `build` uitvoeren. 
 
 ```bash
 npm run build
@@ -25,7 +25,7 @@ npm run build
 
 ## Installatie voorbeeld
 
-Bekijk dit filmpje voor het snel opzetten van dit voorbeeldproject op je eigen computer.
+[Bekijk dit filmpje voor het snel opzetten van dit voorbeeldproject op je eigen computer](https://youtu.be/uuPprdiFKXI).
 
 
 
@@ -47,6 +47,10 @@ document.body.appendChild(app.view)
 let sprite = PIXI.Sprite.from(fish)
 app.stage.addChild(sprite)
 ```
+<br>
+<br>
+<br>
+
 ## Opdracht
 
 Maak een aquarium met vissen en bubbles zoals in deze afbeelding. 
@@ -60,12 +64,17 @@ Maak een aquarium met vissen en bubbles zoals in deze afbeelding.
 <br>
 <br>
 
+# Publiceren op github pages
+
+Push de game naar je eigen github repository. Zet vervolgens de game live door op ***github pages***  te kiezen voor `publish main/docs`.
+
+<br>
+<br>
+<br>
+
 # Links
 
-- [PixiJS Examples](https://pixijs.io/examples/)
-- [PixiJS getting started](https://pixijs.io/guides/basics/getting-started.html)
-- [PixiJS install instructions](https://github.com/pixijs/pixijs)
-- [NodeJS install](https://nodejs.org/en/)
-- [Typescript](https://www.typescriptlang.org)
+- [📺 Installatie instructies Youtube](https://youtu.be/uuPprdiFKXI)
+- [PixiJS Examples](https://pixijs.io/examples/) en [Getting started](https://pixijs.io/guides/basics/getting-started.html)
+- [NodeJS](https://nodejs.org/en/) en [Visual Studio Code](https://code.visualstudio.com)
 - [Dit project zelf opzetten from scratch](./scratch.MD)
-- [Parcel development tool](https://parceljs.org)

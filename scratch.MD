@@ -1,6 +1,11 @@
 # PixiJS Startproject from scratch
 
-Je kan helemaal vanaf scratch beginnen met een **PixiJS Typescript** project in een lege map op je computer. Zorg wel dat je [NodeJS](https://nodejs.org/en/) hebt geïnstalleerd. Je maakt vervolgens een leeg project aan:
+Je kan vanaf scratch beginnen met een leeg **PixiJS Typescript** project in een lege map op je computer. Installeer eerst:
+
+- [NodeJS](https://nodejs.org/en/)
+- [Visual Studio Code](https://code.visualstudio.com)
+
+Maak vervolgens een leeg project aan:
 
 ```bash
 npm init -y
@@ -56,10 +61,8 @@ Er zit een foutmelding in parcel bij het laden van een `png`. Je kan dit negeren
 
 # Links
 
-- [PixiJS Examples](https://pixijs.io/examples/)
-- [PixiJS getting started](https://pixijs.io/guides/basics/getting-started.html)
+- [PixiJS Examples](https://pixijs.io/examples/) en [Getting started](https://pixijs.io/guides/basics/getting-started.html)
 - [PixiJS install instructions](https://github.com/pixijs/pixijs)
-- [NodeJS install](https://nodejs.org/en/)
-- [Typescript](https://www.typescriptlang.org)
-- [Dit project zelf opzetten from scratch](./scratch.MD)
+- [NodeJS](https://nodejs.org/en/) en [Typescript](https://www.typescriptlang.org)
+- [Visual Studio Code](https://code.visualstudio.com)
 - [Parcel development tool](https://parceljs.org)
