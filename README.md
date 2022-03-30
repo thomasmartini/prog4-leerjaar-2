@@ -51,22 +51,9 @@ app.stage.addChild(sprite)
 <br>
 <br>
 
-## Opdracht
-
-Maak een aquarium met vissen en bubbles zoals in deze afbeelding. 
-
-![fishes](./src/images/opdracht.jpg)
-
-- Je kan een `for` loop en `Math.random()` gebruiken voor de posities.
-- Je kan `sprite.tint = Math.random() * 0xFFFFFF;` gebruiken voor een random kleur.
-
-<br>
-<br>
-<br>
-
 # Links
 
 - [📺 Installatie instructies Youtube](https://youtu.be/uuPprdiFKXI)
 - [PixiJS Examples](https://pixijs.io/examples/) en [Getting started](https://pixijs.io/guides/basics/getting-started.html)
 - [NodeJS](https://nodejs.org/en/) en [Visual Studio Code](https://code.visualstudio.com)
-- [Dit project zelf opzetten from scratch](./scratch.MD)
+- [Advanced: dit project zelf opzetten from scratch](./scratch.MD)
