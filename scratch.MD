@@ -17,7 +17,6 @@ Vervolgens installeer je de game libraries:
 npm install pixi.js
 npm install typescript -D
 npm install parcel -D
-npm install @types/pixi.js
 ```
 [Parcel](https://parceljs.org) is de library waarmee we de game modules samenvoegen, typescript compileren, en een dev server starten.
 
@@ -49,9 +48,9 @@ Om je development leven makkelijk te maken kan je deze `watch` en `build` script
 ```
 Dit zorgt ervoor dat je `npm run start` en `npm run build` kan gebruiken.
 
-### 😭 Parcel PNG import Bug
+### 😭 Parcel image import Bug
 
-Er zit een foutmelding in parcel bij het laden van een `png`. Je kan dit negeren, of om de foutmelding te verwijderen kan je `//@ts-ignore` boven de PNG import zetten. Je kan ook een `global.d.ts` bestand in je root neerzetten, met daarin: `declare module "*.png"`
+Er zit een foutmelding in parcel bij het laden van een `png`. Je kan dit negeren, of om de foutmelding te verwijderen kan je `//@ts-ignore` boven de PNG import zetten. Je kan ook een `global.d.ts` bestand in je root neerzetten, met daarin: `declare module "*.png"`. Doe dit ook voor `jpg`.
 
 
 
