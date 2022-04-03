@@ -48,6 +48,18 @@ Om je development leven makkelijk te maken kan je deze `watch` en `build` script
 ```
 Dit zorgt ervoor dat je `npm run start` en `npm run build` kan gebruiken.
 
+<br>
+<br>
+<br>
+
+# Typescript config
+
+Kopieer het `.tsconfig.json` bestand uit deze repository voor de juiste typescript setup.
+
+<br>
+<br>
+<br>
+
 ### 😭 Parcel image import Bug
 
 Er zit een foutmelding in parcel bij het laden van een `png`. Je kan dit negeren, of om de foutmelding te verwijderen kan je `//@ts-ignore` boven de PNG import zetten. Je kan ook een `global.d.ts` bestand in je root neerzetten, met daarin: `declare module "*.png"`. Doe dit ook voor `jpg`.
