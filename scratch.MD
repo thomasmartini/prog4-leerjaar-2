@@ -29,13 +29,24 @@ In app.ts kan je vervolgens PIXI als volgt gebruiken:
 
 ```javascript
 import * as PIXI from 'pixi.js'
-import ship from "./ship.png"
+import fishImage from "./images/fish.png"
+import bubbleImage from "./images/bubble.png"
 
-let app = new PIXI.Application({ width: 640, height: 360 })
-document.body.appendChild(app.view)
+// create a pixi canvas
+const pixi = new PIXI.Application({ width: 800, height: 450 })
+document.body.appendChild(pixi.view)
 
-let sprite = PIXI.Sprite.from(ship)
-app.stage.addChild(sprite)
+// preload all our textures
+const loader = new PIXI.Loader()
+loader.add('fishTexture', fishImage)
+      .add('bubbleTexture', bubbleImage)
+loader.load(()=>loadCompleted())
+
+// after loading is complete, create a fish sprite
+function loadCompleted() {
+    let fish = new PIXI.Sprite(loader.resources["fishTexture"].texture!)
+    pixi.stage.addChild(fish)
+}
 ```
 
 Om je development leven makkelijk te maken kan je deze `watch` en `build` scripts handmatig toevoegen aan `package.json`
