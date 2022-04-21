@@ -12,7 +12,7 @@ Dit is een startproject voor het werken met ***PixiJS en Typescript***. Installe
 
 Open een nieuw VS Code venster. Ga naar **File > Clone Repository** en paste daar de `.git` url van dit project: `https://github.com/HR-CMGT/PRG04-2021-2022-startproject.git`
 
-![clone](./src/images/clone.png)
+![clone](./src/assets/images/clone.png)
 
 In de VS Code terminal typ je:
 
@@ -22,7 +22,7 @@ npm install
 
 In VS Code verschijnt een `start` button in de linkerbalk. Druk hierop om je game te **ontwikkelen**. Druk op `build` als je de game wil gaan **publiceren**.
 
-![start](./src/images/run_npm.png)
+![start](./src/assets/images/run_npm.png)
 
 Je kan die commando's ook in de terminal typen.
 
@@ -39,7 +39,7 @@ npm run build
 
 Als je de game wil publiceren kan je `build` uitvoeren. Upload je game naar je eigen github repository. Ga naar **Settings > Pages** en selecteer daar `main/docs` als bron. Je game is nu online speelbaar!
 
-![pages](./src/images/pages.png)
+![pages](./src/assets/images/pages.png)
 
 
 <br>
@@ -48,29 +48,8 @@ Als je de game wil publiceren kan je `build` uitvoeren. Upload je game naar je e
 
 # Pixi voorbeeldcode
 
-Toon het Pixi Canvas en een Sprite:
+De code in `Game.ts` toont een canvas en een sprite.
 
-```javascript
-import * as PIXI from 'pixi.js'
-import fishImage from "./images/fish.png"
-import bubbleImage from "./images/bubble.png"
-
-// create a pixi canvas
-const pixi = new PIXI.Application({ width: 800, height: 450 })
-document.body.appendChild(pixi.view)
-
-// preload all our textures
-const loader = new PIXI.Loader()
-loader.add('fishTexture', fishImage)
-      .add('bubbleTexture', bubbleImage)
-loader.load(()=>loadCompleted())
-
-// after loading is complete, create a fish sprite
-function loadCompleted() {
-    let fish = new PIXI.Sprite(loader.resources["fishTexture"].texture!)
-    pixi.stage.addChild(fish)
-}
-```
 <br>
 <br>
 <br>
