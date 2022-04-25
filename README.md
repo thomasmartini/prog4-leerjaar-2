@@ -12,7 +12,7 @@ Dit is een startproject voor het werken met ***PixiJS en Typescript***. Installe
 
 Open een nieuw VS Code venster. Ga naar **File > Clone Repository** en paste daar de `.git` url van dit project: `https://github.com/HR-CMGT/PRG04-2021-2022-startproject.git`
 
-![clone](./src/assets/images/clone.png)
+![clone](./src/images/clone.png)
 
 In de VS Code terminal typ je:
 
@@ -22,7 +22,7 @@ npm install
 
 In VS Code verschijnt een `start` button in de linkerbalk. Druk hierop om je game te **ontwikkelen**. Druk op `build` als je de game wil gaan **publiceren**.
 
-![start](./src/assets/images/run_npm.png)
+![start](./src/images/run_npm.png)
 
 Je kan die commando's ook in de terminal typen.
 
@@ -39,7 +39,7 @@ npm run build
 
 Als je de game wil publiceren kan je `build` uitvoeren. Upload je game naar je eigen github repository. Ga naar **Settings > Pages** en selecteer daar `main/docs` als bron. Je game is nu online speelbaar!
 
-![pages](./src/assets/images/pages.png)
+![pages](./src/images/pages.png)
 
 
 <br>
