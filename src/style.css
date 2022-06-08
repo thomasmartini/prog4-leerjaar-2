@@ -1,5 +1,6 @@
 body {
     background-color: rgb(27, 25, 45);
+    
     margin: 0;
     padding: 0;
 }
@@ -7,4 +8,5 @@ body {
 canvas {
     /* for a 800 pixel canvas, place 400 pixels left of center */
     margin: 20px calc(50vw - 400px);
+    
 }
