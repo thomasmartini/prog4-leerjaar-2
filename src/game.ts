@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js"
 import fishImage from "./images/fish.png"
 import bgImage from "./images/water.jpg"
 import bubbleImage from "./images/bubble.png"
-
+let count = 0
 export class Game {
     spritesFish : PIXI.Sprite[] = []
     spritesBubbles: PIXI.Sprite[] = []
@@ -13,7 +13,7 @@ export class Game {
     bubble:PIXI.Sprite
     basictext: PIXI.Text
     anotherBubble:PIXI.Sprite
-    background:PIXI.Sprite
+    background:PIXI.TilingSprite
     loader:PIXI.Loader
 
     constructor() {
@@ -39,13 +39,19 @@ export class Game {
         return randomY
     }
     doneLoading(){
-        this.background = new PIXI.Sprite(this.loader.resources["backgroundTexture"].texture!)
+       
+        this.background = new PIXI.TilingSprite(
+            this.loader.resources["backgroundTexture"].texture!,
+            this.pixi.screen.width,
+            this.pixi.screen.height
+        )
         this.pixi.stage.addChild(this.background)
 
         for (let i = 0; i<10; i++) {
             this.fish = new PIXI.Sprite(this.loader.resources["fishTexture"].texture!)
             this.fish.x = this.randomNumberX()
             this.fish.y = this.randomNumberY()
+            this.fish.blendMode = PIXI.BLEND_MODES.ADD
             this.pixi.stage.addChild(this.fish)
             this.spritesFish.push(this.fish)
 
@@ -101,8 +107,16 @@ export class Game {
             if(sprite.y <= 0 - sprite.height){
                 sprite.x = this.randomNumberX()
                 sprite.y = 500 + sprite.height
+                
             }
         }
+        count += 0.005;
+
+        this.background.tileScale.x = 1 + Math.sin(count);
+        this.background.tileScale.y = 1 + Math.cos(count);
+    
+        this.background.tilePosition.x += 1;
+        this.background.tilePosition.y += 1;
     }
 }
 
