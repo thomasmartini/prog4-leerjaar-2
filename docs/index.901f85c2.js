@@ -525,7 +525,13 @@ var _waterJpg = require("./images/water.jpg");
 var _waterJpgDefault = parcelHelpers.interopDefault(_waterJpg);
 var _bubblePng = require("./images/bubble.png");
 var _bubblePngDefault = parcelHelpers.interopDefault(_bubblePng);
+var _bonesPng = require("./images/bones.png");
+var _bonesPngDefault = parcelHelpers.interopDefault(_bonesPng);
+var _fish = require("./Fish");
+var _bubble = require("./Bubble");
 class Game {
+    fishies = [];
+    bubbles = [];
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 900,
@@ -533,67 +539,32 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add("fishTexture", _fishPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default);
+        this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default);
         this.loader.load(()=>this.doneLoading()
         );
     }
-    randomNumberX() {
-        let randomX = Math.floor(Math.random() * 900);
-        return randomX;
-    }
-    randomNumberY() {
-        let randomY = Math.floor(Math.random() * 500);
-        return randomY;
-    }
     doneLoading() {
-        console.log("all textures loaded!");
         this.background = new _pixiJs.Sprite(this.loader.resources["backgroundTexture"].texture);
         this.pixi.stage.addChild(this.background);
-        this.fish = new _pixiJs.Sprite(this.loader.resources["fishTexture"].texture);
-        this.fish.x = this.randomNumberX();
-        this.fish.y = this.randomNumberY();
-        this.pixi.stage.addChild(this.fish);
-        this.anotherFish = new _pixiJs.Sprite(this.loader.resources["fishTexture"].texture);
-        this.anotherFish.x = this.randomNumberX();
-        this.anotherFish.y = this.randomNumberY();
-        this.pixi.stage.addChild(this.anotherFish);
-        this.bubble = new _pixiJs.Sprite(this.loader.resources["bubbleTexture"].texture);
-        this.bubble.x = this.randomNumberX();
-        this.bubble.y = this.randomNumberY();
-        this.pixi.stage.addChild(this.bubble);
-        this.anotherBubble = new _pixiJs.Sprite(this.loader.resources["bubbleTexture"].texture);
-        this.anotherBubble.x = this.randomNumberX();
-        this.anotherBubble.y = this.randomNumberY();
-        this.pixi.stage.addChild(this.anotherBubble);
+        for(let i = 0; i < 10; i++){
+            let fish = new _fish.Fish(this.loader.resources["fishTexture"].texture, this.loader.resources["deadTexture"].texture);
+            this.fishies.push(fish);
+            this.pixi.stage.addChild(fish);
+            let bubble = new _bubble.Bubble(this.loader.resources["bubbleTexture"].texture);
+            this.bubbles.push(bubble);
+            this.pixi.stage.addChild(bubble);
+        }
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
     }
     update(delta) {
-        this.fish.x -= 2;
-        this.bubble.y -= 1.5;
-        this.anotherBubble.y -= 1.5;
-        this.anotherFish.x -= 3;
-        if (this.fish.x <= -100) {
-            this.fish.x = 900;
-            this.fish.y = this.randomNumberY();
-        }
-        if (this.anotherFish.x <= -100) {
-            this.anotherFish.x = 900;
-            this.anotherFish.y = this.randomNumberY();
-        }
-        if (this.bubble.y <= -40) {
-            this.bubble.x = this.randomNumberX();
-            this.bubble.y = 500;
-        }
-        if (this.anotherBubble.y <= -40) {
-            this.anotherBubble.x = this.randomNumberX();
-            this.anotherBubble.y = 500;
-        }
+        for (let fish of this.fishies)fish.update(delta);
+        for (let bubble of this.bubbles)bubble.update(delta);
     }
 }
 new Game();
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37133,6 +37104,90 @@ module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.
 },{"./helpers/bundle-url":"lgJ39"}],"iMP3P":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bubble.56ab0ad6.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"./helpers/bundle-url":"lgJ39"}],"dLwEI":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bones.df4825d2.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"eMzUh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Fish", ()=>Fish
+);
+var _pixiJs = require("pixi.js");
+class Fish extends _pixiJs.Sprite {
+    constructor(texture, deadTexture){
+        super(texture);
+        this.deadTexture = deadTexture;
+        this.alive = true;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on('pointerdown', ()=>this.fishClicked()
+        );
+        this.x = this.randomX();
+        this.y = this.randomY();
+        this.scale.set(0.5);
+        this.tint = Math.random() * 16777215;
+    }
+    randomX() {
+        let random = Math.floor(Math.random() * 900);
+        return random;
+    }
+    randomY() {
+        let random = Math.floor(Math.random() * 400);
+        return random;
+    }
+    update(delta) {
+        if (this.alive == true) {
+            this.x -= 5;
+            if (this.x <= 0 - this.texture.width) this.resetpos();
+        } else if (this.y < 452) this.y += 1;
+    }
+    resetpos() {
+        this.x = 900;
+        this.y = this.randomY();
+        this.scale.set(Math.random() * 1);
+        this.tint = Math.random() * 16777215;
+    }
+    fishClicked() {
+        this.texture = this.deadTexture;
+        this.alive = false;
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gZ9d3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Bubble", ()=>Bubble
+);
+var _pixiJs = require("pixi.js");
+class Bubble extends _pixiJs.Sprite {
+    constructor(texture){
+        super(texture);
+        this.x = this.randomX();
+        this.y = this.randomY();
+    }
+    randomX() {
+        let random = Math.floor(Math.random() * 900);
+        return random;
+    }
+    randomY() {
+        let random = Math.floor(Math.random() * 400);
+        return random;
+    }
+    update(delta) {
+        this.y -= 2;
+        if (this.y % 2 === 0) {
+            this.x -= Math.random() * 0.5;
+            this.x += Math.random() * 0.5;
+        }
+        if (this.y <= -this.texture.height) this.resetpos();
+    }
+    resetpos() {
+        this.x = this.randomX();
+        this.y = 500;
+        this.scale.set(Math.random() * 1);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
