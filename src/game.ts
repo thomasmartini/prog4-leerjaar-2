@@ -14,12 +14,11 @@ export class Game {
     fishies : Fish[] = []    
     bubbles : Bubble[] = []
 
-    constructor() {
+    public constructor() {
         this.pixi = new PIXI.Application({ width: 900, height: 500 })
         document.body.appendChild(this.pixi.view)
 
-        
-
+    
         this.loader = new PIXI.Loader()
         this.loader
             .add("fishTexture", fishImage)
@@ -29,7 +28,7 @@ export class Game {
 
         this.loader.load(() => this.doneLoading())
     }
-    doneLoading(){
+    private doneLoading(){
         this.background = new PIXI.Sprite(this.loader.resources["backgroundTexture"].texture!)
         this.pixi.stage.addChild(this.background,)
         for(let i = 0; i<10; i++){
@@ -45,7 +44,7 @@ export class Game {
        this.pixi.ticker.add((delta) => this.update(delta))
     }
    
-    update(delta:number) {
+    private update(delta:number) {
         for(let fish of this.fishies){
            fish.update(delta)
         }

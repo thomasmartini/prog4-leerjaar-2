@@ -37124,7 +37124,6 @@ class Fish extends _pixiJs.Sprite {
         );
         this.x = this.randomX();
         this.y = this.randomY();
-        this.scale.set(0.5);
         this.tint = Math.random() * 16777215;
     }
     randomX() {
@@ -37144,12 +37143,12 @@ class Fish extends _pixiJs.Sprite {
     resetpos() {
         this.x = 900;
         this.y = this.randomY();
-        this.scale.set(Math.random() * 1);
         this.tint = Math.random() * 16777215;
     }
     fishClicked() {
         this.texture = this.deadTexture;
         this.alive = false;
+        this.tint = 16777215;
     }
 }
 

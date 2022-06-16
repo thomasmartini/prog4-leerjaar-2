@@ -7,15 +7,15 @@ export class Bubble extends PIXI.Sprite {
         this.x = this.randomX()
         this.y = this.randomY()
     }
-    randomX(){
+   private randomX(){
        let random = Math.floor(Math.random() * 900)
         return random
     }
-    randomY(){
+   private randomY(){
         let random = Math.floor(Math.random() * 400)
          return random
      }
-    update(delta:number) {
+    public update(delta:number) {
         this.y -= 2
         if(this.y % 2 === 0){
         this.x -= Math.random() * 0.5
@@ -25,7 +25,7 @@ export class Bubble extends PIXI.Sprite {
             this.resetpos()
         }
     }
-    resetpos(){
+   private resetpos(){
         this.x = this.randomX()
         this.y = 500
         this.scale.set(Math.random() * 1)
