@@ -565,8 +565,16 @@ class Game {
         window.removeEventListener("click", this.mylistener);
     }
     update() {
-        for (let bubble of this.bubbles)bubble.update();
+        for (let bubble of this.bubbles){
+            bubble.update();
+            if (this.collision(this.fish[0], bubble)) console.log("player touches enemy 💀");
+        }
         for (let fishie of this.fish)fishie.update();
+    }
+    collision(sprite1, sprite2) {
+        const bounds1 = sprite1.getBounds();
+        const bounds2 = sprite2.getBounds();
+        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
     }
 }
 new Game();
