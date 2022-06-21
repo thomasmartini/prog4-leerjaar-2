@@ -530,7 +530,6 @@ var _bonesPngDefault = parcelHelpers.interopDefault(_bonesPng);
 var _fish = require("./Fish");
 var _bubble = require("./Bubble");
 class Game {
-    fishies = [];
     bubbles = [];
     constructor(){
         this.pixi = new _pixiJs.Application({
@@ -538,6 +537,9 @@ class Game {
             height: 500
         });
         document.body.appendChild(this.pixi.view);
+        this.mylistener = (e)=>this.logMessage(e)
+        ;
+        window.addEventListener('click', this.mylistener);
         this.loader = new _pixiJs.Loader();
         this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default);
         this.loader.load(()=>this.doneLoading()
@@ -546,10 +548,9 @@ class Game {
     doneLoading() {
         this.background = new _pixiJs.Sprite(this.loader.resources["backgroundTexture"].texture);
         this.pixi.stage.addChild(this.background);
+        let fish = new _fish.Fish(this.loader.resources["fishTexture"].texture);
+        this.pixi.stage.addChild(fish);
         for(let i = 0; i < 10; i++){
-            let fish = new _fish.Fish(this.loader.resources["fishTexture"].texture, this.loader.resources["deadTexture"].texture);
-            this.fishies.push(fish);
-            this.pixi.stage.addChild(fish);
             let bubble = new _bubble.Bubble(this.loader.resources["bubbleTexture"].texture);
             this.bubbles.push(bubble);
             this.pixi.stage.addChild(bubble);
@@ -557,9 +558,13 @@ class Game {
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
     }
+    logMessage(e) {
+        console.log("click event was called, now removing the listener!");
+        window.removeEventListener("click", this.mylistener);
+    }
     update(delta) {
-        for (let fish of this.fishies)fish.update(delta);
         for (let bubble of this.bubbles)bubble.update(delta);
+        this.fish.update();
     }
 }
 new Game();
@@ -37114,41 +37119,62 @@ parcelHelpers.export(exports, "Fish", ()=>Fish
 );
 var _pixiJs = require("pixi.js");
 class Fish extends _pixiJs.Sprite {
-    constructor(texture, deadTexture){
+    xspeed = 0;
+    yspeed = 0;
+    constructor(texture){
         super(texture);
-        this.deadTexture = deadTexture;
-        this.alive = true;
-        this.interactive = true;
-        this.buttonMode = true;
-        this.on('pointerdown', ()=>this.fishClicked()
+        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
         );
-        this.x = this.randomX();
-        this.y = this.randomY();
-        this.tint = Math.random() * 16777215;
+        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
+        );
     }
-    randomX() {
-        let random = Math.floor(Math.random() * 900);
-        return random;
+    update() {
+        this.x += this.xspeed;
+        this.y += this.yspeed;
     }
-    randomY() {
-        let random = Math.floor(Math.random() * 400);
-        return random;
+    shoot() {
+        console.log("shooooot!");
     }
-    update(delta) {
-        if (this.alive == true) {
-            this.x -= 5;
-            if (this.x <= 0 - this.texture.width) this.resetpos();
-        } else if (this.y < 452) this.y += 1;
+    onKeyDown(e) {
+        switch(e.key.toUpperCase()){
+            case " ":
+                this.shoot();
+                break;
+            case "A":
+            case "ARROWLEFT":
+                this.xspeed = -7;
+                break;
+            case "D":
+            case "ARROWRIGHT":
+                this.xspeed = 7;
+                break;
+            case "W":
+            case "ARROWUP":
+                this.yspeed = -7;
+                break;
+            case "S":
+            case "ARROWDOWN":
+                this.yspeed = 7;
+                break;
+        }
     }
-    resetpos() {
-        this.x = 900;
-        this.y = this.randomY();
-        this.tint = Math.random() * 16777215;
-    }
-    fishClicked() {
-        this.texture = this.deadTexture;
-        this.alive = false;
-        this.tint = 16777215;
+    onKeyUp(e) {
+        switch(e.key.toUpperCase()){
+            case " ":
+                break;
+            case "A":
+            case "D":
+            case "ARROWLEFT":
+            case "ARROWRIGHT":
+                this.xspeed = 0;
+                break;
+            case "W":
+            case "S":
+            case "ARROWUP":
+            case "ARROWDOWN":
+                this.yspeed = 0;
+                break;
+        }
     }
 }
 

@@ -11,13 +11,16 @@ export class Game {
     background:PIXI.Sprite
     bones:PIXI.Sprite
     loader:PIXI.Loader
-    fishies : Fish[] = []    
+    fish : Fish   
     bubbles : Bubble[] = []
+    mylistener:EventListener
+
 
     public constructor() {
         this.pixi = new PIXI.Application({ width: 900, height: 500 })
         document.body.appendChild(this.pixi.view)
-
+        this.mylistener = (e:Event) => this.logMessage(e)
+        window.addEventListener('click', this.mylistener)
     
         this.loader = new PIXI.Loader()
         this.loader
@@ -31,10 +34,10 @@ export class Game {
     private doneLoading(){
         this.background = new PIXI.Sprite(this.loader.resources["backgroundTexture"].texture!)
         this.pixi.stage.addChild(this.background,)
-        for(let i = 0; i<10; i++){
-            let fish = new Fish((this.loader.resources["fishTexture"].texture!),(this.loader.resources["deadTexture"].texture!)) 
-            this.fishies.push(fish)
-            this.pixi.stage.addChild(fish)
+        let fish = new Fish((this.loader.resources["fishTexture"].texture!)) 
+        this.pixi.stage.addChild(fish)
+
+        for(let i = 0; i<10; i++){          
 
             let bubble = new Bubble(this.loader.resources["bubbleTexture"].texture!)
             this.bubbles.push(bubble)
@@ -43,14 +46,16 @@ export class Game {
         
        this.pixi.ticker.add((delta) => this.update(delta))
     }
+    logMessage(e:Event){
+        console.log("click event was called, now removing the listener!")
+        window.removeEventListener("click", this.mylistener)
+    }
    
     private update(delta:number) {
-        for(let fish of this.fishies){
-           fish.update(delta)
-        }
         for(let bubble of this.bubbles){
             bubble.update(delta)
         }
+        this.fish.update()
     }
 }
 

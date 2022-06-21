@@ -1,56 +1,65 @@
 import * as PIXI from "pixi.js"
 
 export class Fish extends PIXI.Sprite {
-    
-    deadTexture : PIXI.Texture
-    alive : boolean
+    xspeed = 0
+    yspeed = 0
 
-    public constructor(texture: PIXI.Texture, deadTexture: PIXI.Texture) {
+    constructor(texture: PIXI.Texture) {
         super(texture)
-        this.deadTexture = deadTexture
-        this.alive = true
-        this.interactive = true
-        this.buttonMode = true
-        this.on('pointerdown', () => this.fishClicked())
-        this.x = this.randomX()
-        this.y = this.randomY()
-        this.tint = Math.random() * 0xFFFFFF
+
+        window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
+        window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
-    private randomX(){
-       let random = Math.floor(Math.random() * 900)
-        return random
+    
+    public update() {
+        this.x += this.xspeed
+        this.y += this.yspeed
     }
-   private randomY(){
-        let random = Math.floor(Math.random() * 400)
-         return random
-     }
-   public update(delta:number) {
-        if(this.alive == true){
-            this.x -= 5
-            if(this.x <= 0 - this.texture.width){
-                this.resetpos()
-            }  
+
+    shoot(){
+        console.log("shooooot!")
+    }
+
+    onKeyDown(e: KeyboardEvent): void {
+        switch (e.key.toUpperCase()) {
+            case " ":
+                this.shoot()
+                break;
+            case "A":
+            case "ARROWLEFT":
+                this.xspeed = -7
+                break
+            case "D":
+            case "ARROWRIGHT":
+                this.xspeed = 7
+                break
+            case "W":
+            case "ARROWUP":
+                this.yspeed = -7
+                break
+            case "S":
+            case "ARROWDOWN":
+                this.yspeed = 7
+                break
         }
-        else{
-            
-            if(this.y < 500 - 48){
-                this.y += 1
-            }else{
+    }
 
-            }
+    private onKeyUp(e: KeyboardEvent): void {
+        switch (e.key.toUpperCase()) {
+            case " ":
+                break;
+            case "A":
+            case "D":
+            case "ARROWLEFT":
+            case "ARROWRIGHT":
+                this.xspeed = 0
+                break
+            case "W":
+            case "S":
+            case "ARROWUP":
+            case "ARROWDOWN":
+                this.yspeed = 0
+                break
         }
-
-    }
-   private resetpos(){
-        this.x = 900
-        this.y = this.randomY()
-        this.tint = Math.random() * 0xFFFFFF
-
-    }
-   private fishClicked() {
-        this.texture = this.deadTexture
-        this.alive = false 
-        this.tint = 0xFFFFFF
-
     }
 }
