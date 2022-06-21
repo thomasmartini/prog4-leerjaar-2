@@ -530,6 +530,7 @@ var _bonesPngDefault = parcelHelpers.interopDefault(_bonesPng);
 var _fish = require("./Fish");
 var _bubble = require("./Bubble");
 class Game {
+    fish = [];
     bubbles = [];
     constructor(){
         this.pixi = new _pixiJs.Application({
@@ -549,27 +550,28 @@ class Game {
         this.background = new _pixiJs.Sprite(this.loader.resources["backgroundTexture"].texture);
         this.pixi.stage.addChild(this.background);
         let fish = new _fish.Fish(this.loader.resources["fishTexture"].texture);
+        this.fish.push(fish);
         this.pixi.stage.addChild(fish);
         for(let i = 0; i < 10; i++){
             let bubble = new _bubble.Bubble(this.loader.resources["bubbleTexture"].texture);
             this.bubbles.push(bubble);
             this.pixi.stage.addChild(bubble);
         }
-        this.pixi.ticker.add((delta)=>this.update(delta)
+        this.pixi.ticker.add(()=>this.update()
         );
     }
     logMessage(e) {
         console.log("click event was called, now removing the listener!");
         window.removeEventListener("click", this.mylistener);
     }
-    update(delta) {
-        for (let bubble of this.bubbles)bubble.update(delta);
-        this.fish.update();
+    update() {
+        for (let bubble of this.bubbles)bubble.update();
+        for (let fishie of this.fish)fishie.update();
     }
 }
 new Game();
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37198,7 +37200,7 @@ class Bubble extends _pixiJs.Sprite {
         let random = Math.floor(Math.random() * 400);
         return random;
     }
-    update(delta) {
+    update() {
         this.y -= 2;
         if (this.y % 2 === 0) {
             this.x -= Math.random() * 0.5;

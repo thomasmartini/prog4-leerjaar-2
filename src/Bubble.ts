@@ -15,7 +15,7 @@ export class Bubble extends PIXI.Sprite {
         let random = Math.floor(Math.random() * 400)
          return random
      }
-    public update(delta:number) {
+    public update() {
         this.y -= 2
         if(this.y % 2 === 0){
         this.x -= Math.random() * 0.5
