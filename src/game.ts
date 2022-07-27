@@ -28,8 +28,6 @@ export class Game {
     public constructor() {
         this.pixi = new PIXI.Application({ width: 900, height: 500 })
         document.body.appendChild(this.pixi.view)
-        this.mylistener = (e:Event) => this.logMessage(e)
-        window.addEventListener('click', this.mylistener)
     
         this.loader = new PIXI.Loader()
         this.loader
@@ -61,10 +59,6 @@ export class Game {
         this.interface = new UI()
         this.pixi.stage.addChild(this.interface)
        this.pixi.ticker.add(() => this.update())
-    }
-    logMessage(e:Event){
-        console.log("click event was called, now removing the listener!")
-        window.removeEventListener("click", this.mylistener)
     }
     private createNewEnemy(){
         let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
@@ -98,10 +92,15 @@ export class Game {
               }
         }
         if(this.defeatCount == 10){
-            this.interface.scoreField.text = "gameOver"
+            this.gameOver()
+            console.log("game over")
 
         }
         this.checkCollisions()
+    }
+    private gameOver(){
+        this.interface.scoreField.text = "gameOver"
+        this.pixi.stop()
     }
 
     private checkCollisions() { {

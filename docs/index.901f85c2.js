@@ -547,9 +547,6 @@ class Game {
             height: 500
         });
         document.body.appendChild(this.pixi.view);
-        this.mylistener = (e)=>this.logMessage(e)
-        ;
-        window.addEventListener('click', this.mylistener);
         this.loader = new _pixiJs.Loader();
         this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default).add("sharkTexture", _sharkPngDefault.default);
         this.loader.load(()=>this.doneLoading()
@@ -573,10 +570,6 @@ class Game {
         this.pixi.stage.addChild(this.interface);
         this.pixi.ticker.add(()=>this.update()
         );
-    }
-    logMessage(e) {
-        console.log("click event was called, now removing the listener!");
-        window.removeEventListener("click", this.mylistener);
     }
     createNewEnemy() {
         let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
@@ -602,8 +595,15 @@ class Game {
                 this.defeatCount += 1;
             }
         }
-        if (this.defeatCount == 10) this.interface.scoreField.text = "gameOver";
+        if (this.defeatCount == 10) {
+            this.gameOver();
+            console.log("game over");
+        }
         this.checkCollisions();
+    }
+    gameOver() {
+        this.interface.scoreField.text = "gameOver";
+        this.pixi.stop();
     }
     checkCollisions() {
         for (let enemy of this.enemies)if (this.collision(this.fish[0], enemy)) {
@@ -37288,7 +37288,6 @@ class Enemy extends _pixiJs.Sprite {
     }
     update(overspeed) {
         this.x += 2.5 + overspeed;
-        console.log(overspeed);
     }
 }
 

@@ -15,7 +15,6 @@ export class Enemy extends PIXI.Sprite {
     }
     update(overspeed:number){
         this.x += (2.5 + overspeed)
-        console.log(overspeed)
 
         }
 
