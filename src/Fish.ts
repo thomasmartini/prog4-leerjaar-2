@@ -1,8 +1,11 @@
 import * as PIXI from "pixi.js"
+import { Game } from "./game"
+
 
 export class Fish extends PIXI.Sprite {
     xspeed = 0
     yspeed = 0
+
     constructor(texture: PIXI.Texture) {
         super(texture)
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
@@ -12,7 +15,7 @@ export class Fish extends PIXI.Sprite {
    public update() {
         this.x += this.xspeed 
         this.y += this.yspeed 
-      
+
     }
 
     private shoot(){

@@ -527,11 +527,20 @@ var _bubblePng = require("./images/bubble.png");
 var _bubblePngDefault = parcelHelpers.interopDefault(_bubblePng);
 var _bonesPng = require("./images/bones.png");
 var _bonesPngDefault = parcelHelpers.interopDefault(_bonesPng);
+var _sharkPng = require("./images/shark.png");
+var _sharkPngDefault = parcelHelpers.interopDefault(_sharkPng);
 var _fish = require("./Fish");
 var _bubble = require("./Bubble");
+var _enemy = require("./enemy");
+var _ui = require("./UI");
 class Game {
     fish = [];
     bubbles = [];
+    enemies = [];
+    enemyTimer = 0;
+    enemyCooldown = 100;
+    EnemySpeed = 0;
+    defeatCount = 0;
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 900,
@@ -542,14 +551,14 @@ class Game {
         ;
         window.addEventListener('click', this.mylistener);
         this.loader = new _pixiJs.Loader();
-        this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default);
+        this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default).add("sharkTexture", _sharkPngDefault.default);
         this.loader.load(()=>this.doneLoading()
         );
     }
     doneLoading() {
         this.background = new _pixiJs.Sprite(this.loader.resources["backgroundTexture"].texture);
         this.pixi.stage.addChild(this.background);
-        let fish = new _fish.Fish(this.loader.resources["fishTexture"].texture);
+        let fish = new _fish.Fish(this.loader.resources["sharkTexture"].texture);
         this.fish.push(fish);
         this.pixi.stage.addChild(fish);
         for(let i = 0; i < 10; i++){
@@ -557,6 +566,11 @@ class Game {
             this.bubbles.push(bubble);
             this.pixi.stage.addChild(bubble);
         }
+        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
+        this.enemies.push(enemy);
+        this.pixi.stage.addChild(enemy);
+        this.interface = new _ui.UI();
+        this.pixi.stage.addChild(this.interface);
         this.pixi.ticker.add(()=>this.update()
         );
     }
@@ -564,12 +578,41 @@ class Game {
         console.log("click event was called, now removing the listener!");
         window.removeEventListener("click", this.mylistener);
     }
+    createNewEnemy() {
+        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
+        this.enemies.push(enemy);
+        this.pixi.stage.addChild(enemy);
+        this.enemyTimer = 0;
+    }
+    deleteEnemy(enemy) {
+        this.enemies = this.enemies.filter((f)=>f != enemy
+        );
+        enemy.destroy();
+        console.log(this.enemyCooldown);
+    }
     update() {
-        for (let bubble of this.bubbles){
-            bubble.update();
-            if (this.collision(this.fish[0], bubble)) console.log("player touches enemy 💀");
-        }
+        for (let bubble of this.bubbles)bubble.update();
         for (let fishie of this.fish)fishie.update();
+        this.enemyTimer += 1;
+        if (this.enemyTimer >= this.enemyCooldown) this.createNewEnemy();
+        for (let enemy of this.enemies){
+            enemy.update(this.EnemySpeed);
+            if (enemy.x > 1100) {
+                this.deleteEnemy(enemy);
+                this.defeatCount += 1;
+            }
+        }
+        if (this.defeatCount == 10) this.interface.scoreField.text = "gameOver";
+        this.checkCollisions();
+    }
+    checkCollisions() {
+        for (let enemy of this.enemies)if (this.collision(this.fish[0], enemy)) {
+            this.deleteEnemy(enemy);
+            if (this.EnemySpeed < 6) this.EnemySpeed += 0.1;
+            if (this.enemyCooldown > 40) this.enemyCooldown -= 1;
+            this.interface.addScore(10);
+            break;
+        }
     }
     collision(sprite1, sprite2) {
         const bounds1 = sprite1.getBounds();
@@ -579,7 +622,7 @@ class Game {
 }
 new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/shark.png":"7HgQx","./enemy":"e8Rej","./UI":"ef7dT"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37220,6 +37263,61 @@ class Bubble extends _pixiJs.Sprite {
         this.x = this.randomX();
         this.y = 500;
         this.scale.set(Math.random() * 1);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7HgQx":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "shark.29daeb95.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"e8Rej":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Enemy", ()=>Enemy
+);
+var _pixiJs = require("pixi.js");
+class Enemy extends _pixiJs.Sprite {
+    xspeed = 0;
+    yspeed = 0;
+    fishOverspeed = 0;
+    timer = 0;
+    constructor(texture, game){
+        super(texture);
+        this.game = game;
+        this.y = Math.random() * 450;
+        this.x = -140;
+    }
+    update(overspeed) {
+        this.x += 2.5 + overspeed;
+        console.log(overspeed);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ef7dT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "UI", ()=>UI
+);
+var _pixiJs = require("pixi.js");
+class UI extends _pixiJs.Container {
+    score = 0;
+    constructor(){
+        super();
+        const style = new _pixiJs.TextStyle({
+            fontFamily: 'ArcadeFont',
+            fontSize: 40,
+            fontWeight: 'bold',
+            fill: [
+                '#ffffff'
+            ]
+        });
+        this.scoreField = new _pixiJs.Text(`Score : 0`, style);
+        this.addChild(this.scoreField);
+        this.scoreField.x = 10;
+        this.scoreField.y = 10;
+    }
+    addScore(n) {
+        this.score += n;
+        this.scoreField.text = `Score : ${this.score}`;
     }
 }
 

@@ -3,8 +3,11 @@ import fishImage from "./images/fish.png"
 import bgImage from "./images/water.jpg"
 import bubbleImage from "./images/bubble.png"
 import deadImage from "./images/bones.png"
+import sharkImage from "./images/shark.png"
 import { Fish } from "./Fish"
 import { Bubble } from "./Bubble"
+import { Enemy } from "./enemy"
+import { UI } from './UI'
 
 export class Game {
     pixi: PIXI.Application 
@@ -13,6 +16,12 @@ export class Game {
     loader:PIXI.Loader
     fish : Fish[] = []   
     bubbles : Bubble[] = []
+    enemies: Enemy[] = []
+    enemyTimer: number = 0
+    enemyCooldown: number = 100
+    EnemySpeed: number = 0
+    interface: UI 
+    defeatCount: number = 0
     mylistener:EventListener
 
 
@@ -28,15 +37,17 @@ export class Game {
             .add("deadTexture", deadImage)
             .add("backgroundTexture", bgImage)
             .add("bubbleTexture", bubbleImage)
+            .add("sharkTexture", sharkImage)
 
         this.loader.load(() => this.doneLoading())
     }
     private doneLoading(){
         this.background = new PIXI.Sprite(this.loader.resources["backgroundTexture"].texture!)
         this.pixi.stage.addChild(this.background,)
-        let fish = new Fish((this.loader.resources["fishTexture"].texture!))
+        let fish = new Fish((this.loader.resources["sharkTexture"].texture!))
         this.fish.push(fish) 
         this.pixi.stage.addChild(fish)
+        
 
         for(let i = 0; i<10; i++){          
 
@@ -44,27 +55,70 @@ export class Game {
             this.bubbles.push(bubble)
             this.pixi.stage.addChild(bubble)
         }
-        
+        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
+        this.enemies.push(enemy)
+        this.pixi.stage.addChild(enemy)
+        this.interface = new UI()
+        this.pixi.stage.addChild(this.interface)
        this.pixi.ticker.add(() => this.update())
     }
     logMessage(e:Event){
         console.log("click event was called, now removing the listener!")
         window.removeEventListener("click", this.mylistener)
     }
+    private createNewEnemy(){
+        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
+        this.enemies.push(enemy)
+        this.pixi.stage.addChild(enemy)
+        this.enemyTimer = 0
+    }
+    public deleteEnemy(enemy: Enemy){
+        this.enemies = this.enemies.filter(f => f != enemy)
+        enemy.destroy()
+        console.log(this.enemyCooldown)
+    }
    
     private update() {
        
         for(let bubble of this.bubbles){
             bubble.update()
-            if(this.collision(this.fish[0], bubble)){
-                console.log("player touches enemy 💀")
-            }
         }
         for (let fishie of this.fish){
            fishie.update()
         }
+        this.enemyTimer += 1 
+        if (this.enemyTimer >= this.enemyCooldown){
+            this.createNewEnemy()
+        }
+        for(let enemy of this.enemies){
+            enemy.update(this.EnemySpeed)
+            if(enemy.x > 1100){
+                this.deleteEnemy(enemy)
+                this.defeatCount += 1
+              }
+        }
+        if(this.defeatCount == 10){
+            this.interface.scoreField.text = "gameOver"
 
+        }
+        this.checkCollisions()
+    }
 
+    private checkCollisions() { {
+            for (let enemy of this.enemies) {
+                if(this.collision(this.fish[0], enemy)){
+                    this.deleteEnemy(enemy)
+                    if(this.EnemySpeed < 6){
+                        this.EnemySpeed += 0.1
+                    }
+                    if(this.enemyCooldown > 40){
+                    this.enemyCooldown -= 1 
+                    }
+                   this.interface.addScore(10)
+                    break
+                }
+            }
+        }
     }
     collision(sprite1:PIXI.Sprite, sprite2:PIXI.Sprite) {
         const bounds1 = sprite1.getBounds()
