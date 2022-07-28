@@ -58,7 +58,7 @@ export class Game {
         this.pixi.stage.addChild(enemy)
         this.interface = new UI()
         this.pixi.stage.addChild(this.interface)
-       this.pixi.ticker.add(() => this.update())
+        this.pixi.ticker.add(() => this.update())
     }
     private createNewEnemy(){
         let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
@@ -99,7 +99,7 @@ export class Game {
         this.checkCollisions()
     }
     private gameOver(){
-        this.interface.scoreField.text = "gameOver"
+        this.interface.scoreField.text = "game Over!"
         this.pixi.stop()
     }
 

@@ -12,6 +12,7 @@ export class Enemy extends PIXI.Sprite {
         this.game = game
         this.y = Math.random() * 450
         this.x = - 140
+        this.scale.set(-1,1)
     }
     update(overspeed:number){
         this.x += (2.5 + overspeed)

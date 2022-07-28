@@ -602,7 +602,7 @@ class Game {
         this.checkCollisions();
     }
     gameOver() {
-        this.interface.scoreField.text = "gameOver";
+        this.interface.scoreField.text = "game Over!";
         this.pixi.stop();
     }
     checkCollisions() {
@@ -37180,13 +37180,26 @@ class Fish extends _pixiJs.Sprite {
         );
         window.addEventListener("keyup", (e)=>this.onKeyUp(e)
         );
+        window.addEventListener("gamepadconnected", ()=>this.controllerAxes()
+        );
+        this.scale.set(-1, 1);
+        this.x = 300;
     }
     update() {
         this.x += this.xspeed;
         this.y += this.yspeed;
+        if (this.controller) this.controllerAxes();
     }
     shoot() {
         console.log("shooooot!");
+    }
+    controllerAxes() {
+        this.controller = navigator.getGamepads()[0];
+        if (this.controller?.axes[1] >= 0.3 || this.controller?.axes[1] <= -0.3 || this.controller?.axes[0] <= -0.3 || this.controller?.axes[0] >= 0.3) {
+            this.yspeed = this.controller?.axes[1] * 7;
+            this.xspeed = this.controller?.axes[0] * 7;
+            console.log(this.controller?.axes);
+        }
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
@@ -37285,6 +37298,7 @@ class Enemy extends _pixiJs.Sprite {
         this.game = game;
         this.y = Math.random() * 450;
         this.x = -140;
+        this.scale.set(-1, 1);
     }
     update(overspeed) {
         this.x += 2.5 + overspeed;
