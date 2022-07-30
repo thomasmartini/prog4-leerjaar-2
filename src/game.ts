@@ -8,10 +8,11 @@ import { Fish } from "./Fish"
 import { Bubble } from "./Bubble"
 import { Enemy } from "./enemy"
 import { UI } from './UI'
+import { Background } from "./background"
 
 export class Game {
     pixi: PIXI.Application 
-    background:PIXI.Sprite
+    background:Background
     bones:PIXI.Sprite
     loader:PIXI.Loader
     fish : Fish[] = []   
@@ -40,8 +41,7 @@ export class Game {
         this.loader.load(() => this.doneLoading())
     }
     private doneLoading(){
-        this.background = new PIXI.Sprite(this.loader.resources["backgroundTexture"].texture!)
-        this.pixi.stage.addChild(this.background,)
+        this.addBackground()
         let fish = new Fish((this.loader.resources["sharkTexture"].texture!))
         this.fish.push(fish) 
         this.pixi.stage.addChild(fish)
@@ -60,6 +60,11 @@ export class Game {
         this.pixi.stage.addChild(this.interface)
         this.pixi.ticker.add(() => this.update())
     }
+    addBackground() {
+        this.background = new Background(this.loader.resources["backgroundTexture"].texture!, this.pixi.screen.width, this.pixi.screen.height)
+        this.pixi.stage.addChild(this.background)
+        console.log(window.screen.width)
+    }
     private createNewEnemy(){
         let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
         this.enemies.push(enemy)
@@ -73,7 +78,7 @@ export class Game {
     }
    
     private update() {
-       
+        this.background.update()  
         for(let bubble of this.bubbles){
             bubble.update()
         }

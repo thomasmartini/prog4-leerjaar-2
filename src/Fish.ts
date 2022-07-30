@@ -1,6 +1,4 @@
 import * as PIXI from "pixi.js"
-import { Game } from "./game"
-
 
 export class Fish extends PIXI.Sprite {
     xspeed = 0
@@ -28,13 +26,9 @@ export class Fish extends PIXI.Sprite {
     }
     controllerAxes(){
             this.controller = navigator.getGamepads()[0]; 
-            if(this.controller?.axes[1] >= 0.3 || this.controller?.axes[1] <= -0.3 || this.controller?.axes[0] <= -0.3 || this.controller?.axes[0] >= 0.3) {
-            this.yspeed = this.controller?.axes[1] * 7
-            this.xspeed = this.controller?.axes[0] * 7
-            console.log(this.controller?.axes)
-            }
-            else{
-              
+            if(this.controller?.axes[1] >= 0.2 || this.controller?.axes[1] <= -0.2 || this.controller?.axes[0] <= -0.2 || this.controller?.axes[0] >= 0.2) {
+            this.yspeed = this.controller?.axes[1] * 6
+            this.xspeed = this.controller?.axes[0] * 6
             }
     }
     
@@ -45,19 +39,19 @@ export class Fish extends PIXI.Sprite {
                 break;
             case "A":
             case "ARROWLEFT":
-                this.xspeed = -7
+                this.xspeed = -6
                 break
             case "D":
             case "ARROWRIGHT":
-                this.xspeed = 7
+                this.xspeed = 6
                 break
             case "W":
             case "ARROWUP":
-                this.yspeed = -7
+                this.yspeed = -6
                 break
             case "S":
             case "ARROWDOWN":
-                this.yspeed = 7
+                this.yspeed = 6
                 break
         }
     }

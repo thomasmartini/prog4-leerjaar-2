@@ -533,6 +533,7 @@ var _fish = require("./Fish");
 var _bubble = require("./Bubble");
 var _enemy = require("./enemy");
 var _ui = require("./UI");
+var _background = require("./background");
 class Game {
     fish = [];
     bubbles = [];
@@ -553,8 +554,7 @@ class Game {
         );
     }
     doneLoading() {
-        this.background = new _pixiJs.Sprite(this.loader.resources["backgroundTexture"].texture);
-        this.pixi.stage.addChild(this.background);
+        this.addBackground();
         let fish = new _fish.Fish(this.loader.resources["sharkTexture"].texture);
         this.fish.push(fish);
         this.pixi.stage.addChild(fish);
@@ -571,6 +571,11 @@ class Game {
         this.pixi.ticker.add(()=>this.update()
         );
     }
+    addBackground() {
+        this.background = new _background.Background(this.loader.resources["backgroundTexture"].texture, this.pixi.screen.width, this.pixi.screen.height);
+        this.pixi.stage.addChild(this.background);
+        console.log(window.screen.width);
+    }
     createNewEnemy() {
         let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
         this.enemies.push(enemy);
@@ -584,6 +589,7 @@ class Game {
         console.log(this.enemyCooldown);
     }
     update() {
+        this.background.update();
         for (let bubble of this.bubbles)bubble.update();
         for (let fishie of this.fish)fishie.update();
         this.enemyTimer += 1;
@@ -622,7 +628,7 @@ class Game {
 }
 new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/shark.png":"7HgQx","./enemy":"e8Rej","./UI":"ef7dT"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/shark.png":"7HgQx","./enemy":"e8Rej","./UI":"ef7dT","./background":"6FKGH","./images/water.jpg":"jj9Eg"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37156,10 +37162,7 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"jj9Eg":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.59ff4e4f.jpg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"iMP3P":[function(require,module,exports) {
+},{}],"iMP3P":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bubble.56ab0ad6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"dLwEI":[function(require,module,exports) {
@@ -37195,10 +37198,9 @@ class Fish extends _pixiJs.Sprite {
     }
     controllerAxes() {
         this.controller = navigator.getGamepads()[0];
-        if (this.controller?.axes[1] >= 0.3 || this.controller?.axes[1] <= -0.3 || this.controller?.axes[0] <= -0.3 || this.controller?.axes[0] >= 0.3) {
-            this.yspeed = this.controller?.axes[1] * 7;
-            this.xspeed = this.controller?.axes[0] * 7;
-            console.log(this.controller?.axes);
+        if (this.controller?.axes[1] >= 0.2 || this.controller?.axes[1] <= -0.2 || this.controller?.axes[0] <= -0.2 || this.controller?.axes[0] >= 0.2) {
+            this.yspeed = this.controller?.axes[1] * 6;
+            this.xspeed = this.controller?.axes[0] * 6;
         }
     }
     onKeyDown(e) {
@@ -37208,19 +37210,19 @@ class Fish extends _pixiJs.Sprite {
                 break;
             case "A":
             case "ARROWLEFT":
-                this.xspeed = -7;
+                this.xspeed = -6;
                 break;
             case "D":
             case "ARROWRIGHT":
-                this.xspeed = 7;
+                this.xspeed = 6;
                 break;
             case "W":
             case "ARROWUP":
-                this.yspeed = -7;
+                this.yspeed = -6;
                 break;
             case "S":
             case "ARROWDOWN":
-                this.yspeed = 7;
+                this.yspeed = 6;
                 break;
         }
     }
@@ -37334,6 +37336,24 @@ class UI extends _pixiJs.Container {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6FKGH":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Background", ()=>Background
+);
+var _pixiJs = require("pixi.js");
+class Background extends _pixiJs.TilingSprite {
+    constructor(texture, w, h){
+        super(texture, w, h);
+    }
+    update() {
+        this.tilePosition.x += 3;
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jj9Eg":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.59ff4e4f.jpg" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
