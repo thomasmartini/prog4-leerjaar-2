@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js"
 
 export class Bubble extends PIXI.Sprite {
     
-    constructor(texture: PIXI.Texture) {
+    public constructor(texture: PIXI.Texture) {
         super(texture)
         this.x = this.randomX()
         this.y = this.randomY()

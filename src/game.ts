@@ -53,20 +53,20 @@ export class Game {
             this.bubbles.push(bubble)
             this.pixi.stage.addChild(bubble)
         }
-        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
+        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!))
         this.enemies.push(enemy)
         this.pixi.stage.addChild(enemy)
         this.interface = new UI()
         this.pixi.stage.addChild(this.interface)
         this.pixi.ticker.add(() => this.update())
     }
-    addBackground() {
+   private addBackground() {
         this.background = new Background(this.loader.resources["backgroundTexture"].texture!, this.pixi.screen.width, this.pixi.screen.height)
         this.pixi.stage.addChild(this.background)
         console.log(window.screen.width)
     }
     private createNewEnemy(){
-        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!),this)
+        let enemy = new Enemy((this.loader.resources["fishTexture"].texture!))
         this.enemies.push(enemy)
         this.pixi.stage.addChild(enemy)
         this.enemyTimer = 0
@@ -124,7 +124,7 @@ export class Game {
             }
         }
     }
-    collision(sprite1:PIXI.Sprite, sprite2:PIXI.Sprite) {
+   private collision(sprite1:PIXI.Sprite, sprite2:PIXI.Sprite) {
         const bounds1 = sprite1.getBounds()
         const bounds2 = sprite2.getBounds()
 
