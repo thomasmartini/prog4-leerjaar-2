@@ -4,6 +4,7 @@ import bgImage from "./images/water.jpg"
 import bubbleImage from "./images/bubble.png"
 import deadImage from "./images/bones.png"
 import sharkImage from "./images/shark.png"
+import restart from "./images/restart.png"
 import { Fish } from "./Fish"
 import { Bubble } from "./Bubble"
 import { Enemy } from "./enemy"
@@ -15,13 +16,15 @@ export class Game {
     background:Background
     bones:PIXI.Sprite
     loader:PIXI.Loader
-    fish : Fish[] = []   
+    fish : Fish 
     bubbles : Bubble[] = []
     enemies: Enemy[] = []
+    gameOverButton: PIXI.Sprite
     enemyTimer: number = 0
     enemyCooldown: number = 100
     EnemySpeed: number = 0
-    interface: UI 
+    interface: UI
+    highScore: UI
     defeatCount: number = 0
     mylistener:EventListener
 
@@ -37,14 +40,14 @@ export class Game {
             .add("backgroundTexture", bgImage)
             .add("bubbleTexture", bubbleImage)
             .add("sharkTexture", sharkImage)
+            .add("restartButton", restart)
 
         this.loader.load(() => this.doneLoading())
     }
     private doneLoading(){
         this.addBackground()
-        let fish = new Fish((this.loader.resources["sharkTexture"].texture!))
-        this.fish.push(fish) 
-        this.pixi.stage.addChild(fish)
+        this.fish = new Fish((this.loader.resources["sharkTexture"].texture!))
+        this.pixi.stage.addChild(this.fish)
         
 
         for(let i = 0; i<10; i++){          
@@ -56,8 +59,14 @@ export class Game {
         let enemy = new Enemy((this.loader.resources["fishTexture"].texture!))
         this.enemies.push(enemy)
         this.pixi.stage.addChild(enemy)
+
         this.interface = new UI()
         this.pixi.stage.addChild(this.interface)
+
+        this.highScore = new UI()
+        this.highScore.highScore()
+        this.pixi.stage.addChild(this.highScore)
+
         this.pixi.ticker.add(() => this.update())
     }
    private addBackground() {
@@ -78,13 +87,11 @@ export class Game {
     }
    
     private update() {
-        this.background.update()  
+        this.background.update() 
+        this.fish.update()  
         for(let bubble of this.bubbles){
             bubble.update()
-        }
-        for (let fishie of this.fish){
-           fishie.update()
-        }
+        }          
         this.enemyTimer += 1 
         if (this.enemyTimer >= this.enemyCooldown){
             this.createNewEnemy()
@@ -104,13 +111,43 @@ export class Game {
         this.checkCollisions()
     }
     private gameOver(){
-        this.interface.scoreField.text = "game Over!"
+        this.interface.gameOver()
         this.pixi.stop()
+        this.gameOverButton = new PIXI.Sprite((this.loader.resources["restartButton"].texture!))// jouw eigen sprite hier
+        this.gameOverButton.width = 100
+        this.gameOverButton.height = 50
+        this.gameOverButton.x = 430
+        this.gameOverButton.y = 250
+        this.gameOverButton.interactive = true
+        this.gameOverButton.buttonMode = true
+        this.gameOverButton.on('pointerdown', () => this.resetGame())
+        this.pixi.stage.addChild(this.gameOverButton)
     }
+    private resetGame(){
+                this.gameOverButton.destroy() 
+                for (let enemy of this.enemies) {
+                    enemy.destroy()
+                }
+                this.enemies = []
+                this.defeatCount = 0
 
+                this.interface.destroy()
+                this.interface = new UI()
+
+                this.highScore.destroy()
+                this.highScore = new UI()
+                this.highScore.highScore()
+                this.pixi.stage.addChild(this.highScore)
+
+                this.fish.x = 300
+                this.fish.y = 300
+
+                this.pixi.stage.addChild(this.interface)
+                this.pixi.start()
+            }
     private checkCollisions() { {
             for (let enemy of this.enemies) {
-                if(this.collision(this.fish[0], enemy)){
+                if(this.collision(this.fish, enemy)){
                     this.deleteEnemy(enemy)
                     if(this.EnemySpeed < 6){
                         this.EnemySpeed += 0.1

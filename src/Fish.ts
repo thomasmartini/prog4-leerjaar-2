@@ -11,10 +11,11 @@ export class Fish extends PIXI.Sprite {
         window.addEventListener("gamepadconnected", () => this.controllerAxes())
         this.scale.set(-1,1)
         this.x = 300
+        this.y = 300
     }
    public update() {
         this.x += this.xspeed 
-        this.y += this.yspeed 
+        this.y += this.yspeed
         if(this.controller){
             this.controllerAxes()
         }

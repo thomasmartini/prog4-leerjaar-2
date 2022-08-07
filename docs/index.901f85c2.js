@@ -529,13 +529,14 @@ var _bonesPng = require("./images/bones.png");
 var _bonesPngDefault = parcelHelpers.interopDefault(_bonesPng);
 var _sharkPng = require("./images/shark.png");
 var _sharkPngDefault = parcelHelpers.interopDefault(_sharkPng);
+var _restartPng = require("./images/restart.png");
+var _restartPngDefault = parcelHelpers.interopDefault(_restartPng);
 var _fish = require("./Fish");
 var _bubble = require("./Bubble");
 var _enemy = require("./enemy");
 var _ui = require("./UI");
 var _background = require("./background");
 class Game {
-    fish = [];
     bubbles = [];
     enemies = [];
     enemyTimer = 0;
@@ -549,25 +550,27 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default).add("sharkTexture", _sharkPngDefault.default);
+        this.loader.add("fishTexture", _fishPngDefault.default).add("deadTexture", _bonesPngDefault.default).add("backgroundTexture", _waterJpgDefault.default).add("bubbleTexture", _bubblePngDefault.default).add("sharkTexture", _sharkPngDefault.default).add("restartButton", _restartPngDefault.default);
         this.loader.load(()=>this.doneLoading()
         );
     }
     doneLoading() {
         this.addBackground();
-        let fish = new _fish.Fish(this.loader.resources["sharkTexture"].texture);
-        this.fish.push(fish);
-        this.pixi.stage.addChild(fish);
+        this.fish = new _fish.Fish(this.loader.resources["sharkTexture"].texture);
+        this.pixi.stage.addChild(this.fish);
         for(let i = 0; i < 10; i++){
             let bubble = new _bubble.Bubble(this.loader.resources["bubbleTexture"].texture);
             this.bubbles.push(bubble);
             this.pixi.stage.addChild(bubble);
         }
-        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
+        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture);
         this.enemies.push(enemy);
         this.pixi.stage.addChild(enemy);
         this.interface = new _ui.UI();
         this.pixi.stage.addChild(this.interface);
+        this.highScore = new _ui.UI();
+        this.highScore.highScore();
+        this.pixi.stage.addChild(this.highScore);
         this.pixi.ticker.add(()=>this.update()
         );
     }
@@ -577,7 +580,7 @@ class Game {
         console.log(window.screen.width);
     }
     createNewEnemy() {
-        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture, this);
+        let enemy = new _enemy.Enemy(this.loader.resources["fishTexture"].texture);
         this.enemies.push(enemy);
         this.pixi.stage.addChild(enemy);
         this.enemyTimer = 0;
@@ -590,8 +593,8 @@ class Game {
     }
     update() {
         this.background.update();
+        this.fish.update();
         for (let bubble of this.bubbles)bubble.update();
-        for (let fishie of this.fish)fishie.update();
         this.enemyTimer += 1;
         if (this.enemyTimer >= this.enemyCooldown) this.createNewEnemy();
         for (let enemy of this.enemies){
@@ -608,11 +611,38 @@ class Game {
         this.checkCollisions();
     }
     gameOver() {
-        this.interface.scoreField.text = "game Over!";
+        this.interface.gameOver();
         this.pixi.stop();
+        this.gameOverButton = new _pixiJs.Sprite(this.loader.resources["restartButton"].texture) // jouw eigen sprite hier
+        ;
+        this.gameOverButton.width = 100;
+        this.gameOverButton.height = 50;
+        this.gameOverButton.x = 430;
+        this.gameOverButton.y = 250;
+        this.gameOverButton.interactive = true;
+        this.gameOverButton.buttonMode = true;
+        this.gameOverButton.on('pointerdown', ()=>this.resetGame()
+        );
+        this.pixi.stage.addChild(this.gameOverButton);
+    }
+    resetGame() {
+        this.gameOverButton.destroy();
+        for (let enemy of this.enemies)enemy.destroy();
+        this.enemies = [];
+        this.defeatCount = 0;
+        this.interface.destroy();
+        this.interface = new _ui.UI();
+        this.highScore.destroy();
+        this.highScore = new _ui.UI();
+        this.highScore.highScore();
+        this.pixi.stage.addChild(this.highScore);
+        this.fish.x = 300;
+        this.fish.y = 300;
+        this.pixi.stage.addChild(this.interface);
+        this.pixi.start();
     }
     checkCollisions() {
-        for (let enemy of this.enemies)if (this.collision(this.fish[0], enemy)) {
+        for (let enemy of this.enemies)if (this.collision(this.fish, enemy)) {
             this.deleteEnemy(enemy);
             if (this.EnemySpeed < 6) this.EnemySpeed += 0.1;
             if (this.enemyCooldown > 40) this.enemyCooldown -= 1;
@@ -628,7 +658,7 @@ class Game {
 }
 new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/shark.png":"7HgQx","./enemy":"e8Rej","./UI":"ef7dT","./background":"6FKGH","./images/water.jpg":"jj9Eg"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/water.jpg":"jj9Eg","./images/bubble.png":"iMP3P","./images/bones.png":"dLwEI","./Fish":"eMzUh","./Bubble":"gZ9d3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/shark.png":"7HgQx","./enemy":"e8Rej","./UI":"ef7dT","./background":"6FKGH","./images/restart.png":"8TrrX"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37162,7 +37192,10 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"iMP3P":[function(require,module,exports) {
+},{}],"jj9Eg":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.59ff4e4f.jpg" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"iMP3P":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bubble.56ab0ad6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"dLwEI":[function(require,module,exports) {
@@ -37187,6 +37220,7 @@ class Fish extends _pixiJs.Sprite {
         );
         this.scale.set(-1, 1);
         this.x = 300;
+        this.y = 300;
     }
     update() {
         this.x += this.xspeed;
@@ -37295,9 +37329,8 @@ class Enemy extends _pixiJs.Sprite {
     yspeed = 0;
     fishOverspeed = 0;
     timer = 0;
-    constructor(texture, game){
+    constructor(texture){
         super(texture);
-        this.game = game;
         this.y = Math.random() * 450;
         this.x = -140;
         this.scale.set(-1, 1);
@@ -37315,6 +37348,7 @@ parcelHelpers.export(exports, "UI", ()=>UI
 var _pixiJs = require("pixi.js");
 class UI extends _pixiJs.Container {
     score = 0;
+    lastScore = localStorage.getItem('lastscore');
     constructor(){
         super();
         const style = new _pixiJs.TextStyle({
@@ -37334,6 +37368,19 @@ class UI extends _pixiJs.Container {
         this.score += n;
         this.scoreField.text = `Score : ${this.score}`;
     }
+    gameOver() {
+        this.scoreField.x = 450 - this.width;
+        this.scoreField.y = 250 - this.height;
+        this.scoreField.text = `Game Over: Score : ${this.score}`;
+        if (this.score > JSON.parse(this.lastScore)) localStorage.setItem('lastscore', JSON.stringify(this.score));
+    }
+    highScore() {
+        if (this.lastScore) {
+            this.scoreField.x = 620;
+            this.scoreField.y = 10;
+            this.scoreField.text = `Highscore : ${this.lastScore}`;
+        }
+    }
 }
 
 },{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6FKGH":[function(require,module,exports) {
@@ -37351,8 +37398,8 @@ class Background extends _pixiJs.TilingSprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jj9Eg":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.59ff4e4f.jpg" + "?" + Date.now();
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8TrrX":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "restart.7ecd3a10.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
