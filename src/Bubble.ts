@@ -7,11 +7,11 @@ export class Bubble extends PIXI.Sprite {
         this.x = this.randomX()
         this.y = this.randomY()
     }
-   private randomX(){
+    private randomX(){
        let random = Math.floor(Math.random() * 900)
         return random
     }
-   private randomY(){
+    private randomY(){
         let random = Math.floor(Math.random() * 400)
          return random
      }

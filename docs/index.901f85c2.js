@@ -37227,9 +37227,6 @@ class Fish extends _pixiJs.Sprite {
         this.y += this.yspeed;
         if (this.controller) this.controllerAxes();
     }
-    shoot() {
-        console.log("shooooot!");
-    }
     controllerAxes() {
         this.controller = navigator.getGamepads()[0];
         if (this.controller?.axes[1] >= 0.2 || this.controller?.axes[1] <= -0.2 || this.controller?.axes[0] <= -0.2 || this.controller?.axes[0] >= 0.2) {
@@ -37239,9 +37236,6 @@ class Fish extends _pixiJs.Sprite {
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
-            case " ":
-                this.shoot();
-                break;
             case "A":
             case "ARROWLEFT":
                 this.xspeed = -6;
@@ -37348,7 +37342,7 @@ parcelHelpers.export(exports, "UI", ()=>UI
 var _pixiJs = require("pixi.js");
 class UI extends _pixiJs.Container {
     score = 0;
-    lastScore = localStorage.getItem('lastscore');
+    highScoreNumber = localStorage.getItem('lastscore');
     constructor(){
         super();
         const style = new _pixiJs.TextStyle({
@@ -37372,13 +37366,17 @@ class UI extends _pixiJs.Container {
         this.scoreField.x = 450 - this.width;
         this.scoreField.y = 250 - this.height;
         this.scoreField.text = `Game Over: Score : ${this.score}`;
-        if (this.score > JSON.parse(this.lastScore)) localStorage.setItem('lastscore', JSON.stringify(this.score));
+        if (this.score > JSON.parse(this.highScoreNumber)) localStorage.setItem('lastscore', JSON.stringify(this.score));
     }
     highScore() {
-        if (this.lastScore) {
+        if (this.highScoreNumber) {
+            this.scoreField.x = 580;
+            this.scoreField.y = 10;
+            this.scoreField.text = `Highscore : ${this.highScoreNumber}`;
+        } else {
             this.scoreField.x = 620;
             this.scoreField.y = 10;
-            this.scoreField.text = `Highscore : ${this.lastScore}`;
+            this.scoreField.text = `Highscore : ${0}`;
         }
     }
 }

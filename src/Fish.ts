@@ -21,9 +21,6 @@ export class Fish extends PIXI.Sprite {
         }
     }
 
-    private shoot(){
-        console.log("shooooot!")
-    }
     private controllerAxes(){
             this.controller = navigator.getGamepads()[0]; 
             if(this.controller?.axes[1] >= 0.2 || this.controller?.axes[1] <= -0.2 || this.controller?.axes[0] <= -0.2 || this.controller?.axes[0] >= 0.2) {
@@ -34,9 +31,6 @@ export class Fish extends PIXI.Sprite {
     
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
-            case " ":
-                this.shoot()
-                break;
             case "A":
             case "ARROWLEFT":
                 this.xspeed = -6

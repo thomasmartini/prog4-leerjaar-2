@@ -5,7 +5,7 @@ export class UI extends PIXI.Container {
     scoreField:PIXI.Text
     nameField:PIXI.Text
     score:number = 0
-    lastScore = localStorage.getItem('lastscore')
+    highScoreNumber = localStorage.getItem('lastscore')
 
     public constructor(){
         super()
@@ -30,15 +30,19 @@ export class UI extends PIXI.Container {
         this.scoreField.x = 450 - this.width
         this.scoreField.y = 250 - this.height
         this.scoreField.text = `Game Over: Score : ${this.score}`
-        if(this.score > JSON.parse(this.lastScore)){
+        if(this.score > JSON.parse(this.highScoreNumber)){
             localStorage.setItem('lastscore', JSON.stringify(this.score))
         } 
     }
     public highScore(){   
-        if(this.lastScore) {
+        if(this.highScoreNumber) {
+        this.scoreField.x = 580
+        this.scoreField.y = 10
+        this.scoreField.text = `Highscore : ${this.highScoreNumber}`
+    }else{
         this.scoreField.x = 620
         this.scoreField.y = 10
-        this.scoreField.text = `Highscore : ${this.lastScore}`
+        this.scoreField.text = `Highscore : ${0}`
     }
 }
 }
